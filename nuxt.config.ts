@@ -144,7 +144,7 @@ export default defineNuxtConfig({
       script: [
         {
           async: true,
-          src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6854228552748383',
+          src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2472509388621380',
           crossorigin: 'anonymous'
         }
       ]
