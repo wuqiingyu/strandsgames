@@ -208,14 +208,38 @@ const showNotificationPromptDelayed = () => {
   if (!dismissed || parseInt(dismissed) < dayAgo) {
     setTimeout(() => {
       if (Notification.permission === 'default') {
+        console.log('Showing notification prompt')
         showNotificationPrompt.value = true
       }
     }, 10000) // Show after 10 seconds
   }
 }
 
+// Force show install prompt for testing in development
+const forceShowInstallPrompt = () => {
+  if (process.dev) {
+    console.log('Development mode: forcing install prompt after 3 seconds')
+    setTimeout(() => {
+      if (!showInstallPrompt.value) {
+        // Create a mock deferred prompt for testing
+        deferredPrompt.value = {
+          prompt: () => {
+            console.log('Mock install prompt triggered - this simulates the real PWA install dialog')
+            alert('PWA Install Dialog\n\nIn a real browser with PWA support, this would show the install prompt.')
+            return Promise.resolve()
+          },
+          userChoice: Promise.resolve({ outcome: 'accepted' })
+        }
+        showInstallPrompt.value = true
+      }
+    }, 3000)
+  }
+}
+
 // Lifecycle
 onMounted(() => {
+  console.log('PWAManager mounted')
+  
   // Check if already installed
   if (window.matchMedia('(display-mode: standalone)').matches) {
     console.log('App is running in standalone mode')
@@ -229,6 +253,9 @@ onMounted(() => {
   if (!dismissed || parseInt(dismissed) < dayAgo) {
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
   }
+  
+  // Force show install prompt in development mode
+  forceShowInstallPrompt()
   
   // Show notification prompt
   showNotificationPromptDelayed()

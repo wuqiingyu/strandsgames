@@ -21,6 +21,9 @@
             <NuxtLink to="/about" class="text-gray-600 hover:text-blue-600 transition-colors">
               About
             </NuxtLink>
+            <NuxtLink to="/wiki" class="text-gray-600 hover:text-blue-600 transition-colors">
+              Wiki
+            </NuxtLink>
             <AddToHomeScreen />
             <ThemeToggle />
           </nav>
@@ -79,7 +82,7 @@
         <!-- Mobile Navigation Bar (Only on mobile) -->
         <div class="md:hidden pt-6 border-t border-gray-200">
           <div class="flex justify-center">
-            <nav class="flex items-center space-x-8">
+            <nav class="flex items-center space-x-6">
               <NuxtLink 
                 to="/about" 
                 class="flex flex-col items-center text-gray-600 hover:text-blue-600 transition-colors"
@@ -88,6 +91,16 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
                 <span class="text-xs font-medium">About</span>
+              </NuxtLink>
+              
+              <NuxtLink 
+                to="/wiki" 
+                class="flex flex-col items-center text-gray-600 hover:text-blue-600 transition-colors"
+              >
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+                <span class="text-xs font-medium">Wiki</span>
               </NuxtLink>
               
               <NuxtLink 
@@ -124,5 +137,88 @@
 
     <!-- PWA Manager (Install + Notifications) -->
     <PWAManager />
+    
+    <!-- Scroll to Top Button - Direct Implementation -->
+    <button
+      v-if="showScrollToTop"
+      @click="scrollToTop"
+      class="fixed bottom-6 right-6 z-50 p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110"
+      aria-label="回到顶部"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg" 
+        class="h-5 w-5" 
+        fill="none" 
+        viewBox="0 0 24 24" 
+        stroke="currentColor"
+      >
+        <path 
+          stroke-linecap="round" 
+          stroke-linejoin="round" 
+          stroke-width="2" 
+          d="M5 10l7-7m0 0l7 7m-7-7v18" 
+        />
+      </svg>
+    </button>
   </div>
 </template>
+
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+
+// AdSense配置
+useHead({
+  script: [
+    {
+      async: true,
+      src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8561668117424705',
+      crossorigin: 'anonymous'
+    }
+  ]
+})
+
+// ScrollToTop functionality
+const showScrollToTop = ref(false)
+
+const checkScrollPosition = () => {
+  showScrollToTop.value = window.scrollY > 300
+}
+
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
+
+onMounted(() => {
+  console.log('Layout with ScrollToTop mounted')
+  
+  // 初始检查
+  checkScrollPosition()
+  
+  // 添加滚动监听
+  window.addEventListener('scroll', checkScrollPosition)
+  
+  // 开发模式测试 - 3秒后显示
+  if (process.dev) {
+    setTimeout(() => {
+      console.log('Dev mode: showing scroll to top button')
+      showScrollToTop.value = true
+    }, 3000)
+  }
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', checkScrollPosition)
+})
+</script>
+
+<style scoped>
+/* 移动端适配ScrollToTop按钮 */
+@media (max-width: 768px) {
+  .fixed.bottom-6.right-6 {
+    bottom: 5rem; /* 避开移动端footer导航 */
+  }
+}
+</style>
