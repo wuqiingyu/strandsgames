@@ -61,7 +61,23 @@
   to = "/"
   status = 301
 
-# 404 handling
+# Static files should be served directly (add before catch-all redirect)
+[[headers]]
+  for = "/ads.txt"
+  [headers.values]
+    Content-Type = "text/plain"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Content-Type = "text/plain"
+
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Content-Type = "application/xml"
+
+# 404 handling - moved to end and made more specific
 [[redirects]]
   from = "/*"
   to = "/404"

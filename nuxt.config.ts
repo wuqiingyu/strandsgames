@@ -167,7 +167,10 @@ export default defineNuxtConfig({
         '/contact',
         '/privacy-policy',
         '/terms',
-        '/cookies'
+        '/cookies',
+        '/ads.txt',
+        '/robots.txt',
+        '/sitemap.xml'
       ]
     }
   },
