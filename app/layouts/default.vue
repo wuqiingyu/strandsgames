@@ -44,7 +44,7 @@
     
     <!-- Main Content -->
     <main class="max-w-6xl mx-auto px-4 py-6 relative z-10">
-      <slot />
+      <slot></slot>
     </main>
     
     <!-- Footer Component - Inline -->
