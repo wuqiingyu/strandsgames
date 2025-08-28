@@ -1,0 +1,9 @@
+User-Agent: *
+Allow: /
+Disallow: /*/
+
+# Allow AdSense crawlers
+User-Agent: Mediapartners-Google
+Allow: /
+
+Sitemap: https://blrssco.com/api/sitemap.xml
